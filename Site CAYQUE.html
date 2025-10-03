@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bolos no Pote Delícia</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* estilos mínimos para feedback visual rápido */
+    .sucesso { color: green; display:none; margin-top:10px; }
+    .erro { color: red; display:none; margin-top:10px; }
+    .logout-btn { display:none; margin-left: 10px; }
+    header { display:flex; justify-content:space-between; align-items:center; }
+  </style>
+</head>
+<body>
+
+  <!-- Cabeçalho com botão de logout (visível quando logado) -->
+  <header>
+    <div id="logo">🍰 Bolos no Pote Delícia</div>
+    <div>
+      <button id="btnLogout" class="logout-btn">🔓 Sair</button>
+    </div>
+  </header>
+  
+  <!-- CADASTRO -->
+  <section id="cadastro" class="secao">
+    <h1>👩‍🍳 Cadastro</h1>
+    <form id="formCadastro" novalidate>
+      <label for="nomeCadastro">Nome</label>
+      <input id="nomeCadastro" type="text" placeholder="Seu nome completo" required>
+
+      <label for="emailCadastro">E-mail</label>
+      <input id="emailCadastro" type="email" placeholder="seu@exemplo.com" required>
+
+      <label for="senhaCadastro">Senha</label>
+      <input id="senhaCadastro" type="password" placeholder="Crie uma senha" required minlength="4">
+
+      <button type="submit" class="btn">Cadastrar</button>
+    <!-- Mensagem de carregamento (inicialmente escondida) -->
+      <div class="sucesso" id="msgAutenticando" style="display:none;">🔒 Autenticando cadastro, aguarde...</div>
+      
+      <!-- Mensagem de sucesso após o cadastro -->
+      <div class="sucesso" id="sucessoCadastro" style="display:none;">✅ Cadastro realizado com sucesso! Agora faça login.</div>
+      </form>
+    
+    <p>Já tem conta? <a href="#" class="js-nav" data-target="login">Entrar</a></p>
+  </section>
+
+  <!-- LOGIN -->
+  <section id="login" class="secao">
+    <h1>🔐 Login</h1>
+    <form id="formLogin" novalidate>
+      <label for="emailLogin">E-mail</label>
+      <input id="emailLogin" type="email" placeholder="seu@exemplo.com" required>
+
+      <label for="senhaLogin">Senha</label>
+      <input id="senhaLogin" type="password" placeholder="Sua senha" required>
+
+      <button type="submit" class="btn">Entrar</button>
+  <div class="sucesso" id="msgAutenticandoLogin" style="display:none;">🔒 Autenticando login, aguarde...</div>
+  <div class="erro" id="erroLogin">⚠️ E-mail ou senha inválidos.</div>
+    </form>
+
+    <p>Não tem conta? <a href="#" class="js-nav" data-target="cadastro">Cadastre-se</a></p>
+  </section>
+
+  <!-- TELA INICIAL -->
+  <section id="inicio" class="secao">
+    <h1>🍰 Bem-vindo ao Bolos no Pote 01.SABORESCRIATIVOBH</h1>
+    <p id="bemVindoTexto">O sabor que conquista no primeiro pote!</p>
+    <a href="#" class="btn js-nav" data-target="menu">👉 Clique aqui para começar</a>
+  </section>
+
+  <!-- MENU PRINCIPAL -->
+  <section id="menu" class="secao">
+    <h1>🍰 Bolos no Pote Delícia</h1>
+    <p>Escolha o que deseja fazer:</p>
+
+    <nav class="menu">
+      <a href="#" class="btn js-nav" data-target="pedido">📦 Fazer Pedido</a>
+      <a href="#" class="btn js-nav" data-target="feedback">⭐ Deixar Feedback</a>
+      <a href="#" class="btn js-nav" data-target="fidelidade">🎟️ Cartela Fidelidade</a>
+      <a href="#" class="btn btn-sec js-nav" data-target="inicio">⬅️ Voltar</a>
+    </nav>
+  </section>
+
+  <!-- ETAPA 1: PEDIDO (resumido) -->
+  <section id="pedido" class="secao">
+    <h2>📦 Fazer Pedido</h2>
+    <form id="formPedido" novalidate>
+      <label for="nome">Nome</label>
+      <input id="nome" name="nome" type="text" placeholder="Seu nome completo" required minlength="2" autocomplete="name">
+
+      <label for="email">E-mail</label>
+      <input id="email" name="email" type="email" placeholder="seu@exemplo.com" required autocomplete="email">
+
+      <label for="tel">Telefone</label>
+      <input id="tel" name="tel" type="tel" placeholder="(31) 99999-9999" required>
+
+      <label for="sabor">Escolha o sabor</label>
+      <select id="sabor" name="sabor" required>
+        <option value="">Selecione um sabor</option>
+        <option value="Chocolate" data-preco="10">🍫 Chocolate - R$10,00</option>
+        <option value="Doce de Leite" data-preco="10">🥛 Doce de Leite - R$10,00</option>
+        <option value="Doce de Leite com Coco" data-preco="12">🥥 Doce de Leite com Coco - R$12,00</option>
+      </select>
+
+      <label for="quantidade">Quantidade</label>
+      <input id="quantidade" name="quantidade" type="number" min="1" max="50" placeholder="Ex: 3" required>
+
+      <label for="mensagem">Observações</label>
+      <textarea id="mensagem" name="mensagem" rows="4" placeholder="Ex: Entregar à tarde, sem granulado..."></textarea>
+
+      <button type="submit" class="btn">Enviar pelo WhatsApp 🍫</button>
+      <div class="sucesso" aria-live="polite">✅ Obrigado! Seu pedido foi enviado com sucesso.</div>
+    </form>
+
+    <a href="#" class="btn btn-sec js-nav" data-target="menu">⬅️ Voltar</a>
+  </section>
+
+  <!-- ETAPA 2: FEEDBACK -->
+  <section id="feedback" class="secao">
+    <h2>⭐ Avalie sua experiência</h2>
+    <form id="formFeedback" novalidate>
+      <label for="nota">Sua nota:</label>
+      <select id="nota" name="nota" required>
+        <option value="">Escolha</option>
+        <option value="5">⭐⭐⭐⭐⭐ Excelente</option>
+        <option value="4">⭐⭐⭐⭐ Muito bom</option>
+        <option value="3">⭐⭐⭐ Bom</option>
+        <option value="2">⭐⭐ Regular</option>
+        <option value="1">⭐ Ruim</option>
+      </select>
+
+      <label for="comentario">Comentário</label>
+      <textarea id="comentario" name="comentario" rows="4" placeholder="Escreva aqui sua opinião..." required></textarea>
+
+      <button type="submit" class="btn">Enviar Feedback</button>
+      <div class="sucesso">✅ Obrigado pelo seu feedback!</div>
+    </form>
+
+    <a href="#" class="btn btn-sec js-nav" data-target="menu">⬅️ Voltar</a>
+  </section>
+
+  <!-- ETAPA 3: FIDELIDADE -->
+  <section id="fidelidade" class="secao">
+    <h2>🎟️ Cartela de Fidelidade</h2>
+    <p>A cada pedido, você ganha 1 carimbo. Junte 10 e ganhe 1 bolo grátis!</p>
+    <div id="cartela" class="cartela"></div>
+    <a href="#" class="btn btn-sec js-nav" data-target="menu">⬅️ Voltar</a>
+  </section>
+
+  <script>
+    // ===== Elementos principais =====
+    const btnLogout = document.getElementById('btnLogout');
+    const setores = document.querySelectorAll('.secao');
+
+    // ===== Navegação entre seções =====
+    function mostrarSecao(id) {
+      document.querySelectorAll('.secao').forEach(sec => sec.classList.remove('ativa'));
+      const alvo = document.getElementById(id);
+      if (alvo) alvo.classList.add('ativa');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      atualizarVisibilidadeLogout();
+    }
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.js-nav');
+      if (!btn) return;
+      e.preventDefault();
+      mostrarSecao(btn.dataset.target);
+    });
+
+    // ===== Utilidades de sessão (localStorage) =====
+    function setUsuarioLogado(email) {
+      localStorage.setItem('usuarioLogado', email);
+      atualizarVisibilidadeLogout();
+    }
+    function limparSessao() {
+      localStorage.removeItem('usuarioLogado');
+      atualizarVisibilidadeLogout();
+    }
+    function getUsuarioLogado() {
+      return localStorage.getItem('usuarioLogado'); 
+    }
+
+    function atualizarVisibilidadeLogout() {
+      const logado = !!getUsuarioLogado();
+      // mostra botão logout se estiver logado
+      btnLogout.style.display = logado ? 'inline-block' : 'none';
+      // se estiver logado, manter o usuário nas telas protegidas, caso contrário redirecionar para login
+      if (!logado) {
+        // se nenhuma seção ativa ou se a seção atual não for 'cadastro' nem 'login', forçar para login
+        const ativa = document.querySelector('.secao.ativa');
+        if (!ativa || (ativa.id !== 'cadastro' && ativa.id !== 'login')) {
+          mostrarSecao('login');
+        }
+      } else {
+        // se está logado e estiver na tela de login/cadastro, leva para inicio
+        const ativa = document.querySelector('.secao.ativa');
+        if (ativa && (ativa.id === 'login' || ativa.id === 'cadastro')) {
+          mostrarSecao('inicio');
+        }
+        // atualiza texto de boas-vindas com o nome salvo (se existir)
+        const usuarioSalvo = JSON.parse(localStorage.getItem('usuario') || '{}');
+        if (usuarioSalvo && usuarioSalvo.nome) {
+          const txt = document.getElementById('bemVindoTexto');
+          if (txt) txt.textContent = `Olá, ${usuarioSalvo.nome}! O sabor que conquista no primeiro pote!`;
+        }
+      }
+    }
+
+    // ===== Logout =====
+    if (btnLogout) {
+      btnLogout.addEventListener('click', () => {
+        if (confirm('Deseja realmente sair da sua conta?')) {
+          limparSessao();
+          alert('Você saiu da conta.');
+          mostrarSecao('login');
+        }
+      });
+    }
+
+    // ===== Cadastro =====
+      const formCadastro = document.getElementById('formCadastro');
+      const msgAutenticando = document.getElementById('msgAutenticando');
+      const sucessoCadastro = document.getElementById('sucessoCadastro');
+
+    if (formCadastro) {
+      formCadastro.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        if (!formCadastro.checkValidity()) {
+          formCadastro.reportValidity();
+          return;
+        }
+
+        // Exibe a mensagem de autenticando e esconde a de sucesso
+        msgAutenticando.style.display = 'block';
+        sucessoCadastro.style.display = 'none';
+
+        const usuario = {
+          nome: document.getElementById('nomeCadastro').value.trim(),
+          email: document.getElementById('emailCadastro').value.trim(),
+          senha: document.getElementById('senhaCadastro').value.trim()
+        };
+
+        // Salva usuário no localStorage em JSON.
+        localStorage.setItem("usuario", JSON.stringify(usuario));
+
+        // Após 3 segundos, esconde autenticando, mostra sucesso, reseta formulário e redireciona
+        setTimeout(() => {
+          msgAutenticando.style.display = 'none';
+          sucessoCadastro.style.display = 'block';
+          formCadastro.reset();
+          setTimeout(() => mostrarSecao('login'), 1000);
+        }, 3000);
+      });
+    }
+
+    // ===== Login =====
+    const formLogin = document.getElementById('formLogin');
+    if (formLogin) {
+      const msgAutenticandoLogin = document.getElementById('msgAutenticandoLogin');
+      formLogin.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (!formLogin.checkValidity()) { formLogin.reportValidity(); return; }
+
+        // Exibe mensagem de autenticando e esconde erro
+        msgAutenticandoLogin.style.display = 'block';
+        document.getElementById('erroLogin').style.display = 'none';
+
+        setTimeout(() => {
+          msgAutenticandoLogin.style.display = 'none';
+
+          const email = document.getElementById('emailLogin').value.trim();
+          const senha = document.getElementById('senhaLogin').value.trim();
+          const usuarioSalvo = JSON.parse(localStorage.getItem("usuario") || "{}");
+
+          if (usuarioSalvo.email === email && usuarioSalvo.senha === senha) {
+            setUsuarioLogado(email); // salva sessão
+            mostrarSecao('inicio');
+          } else {
+            document.getElementById('erroLogin').style.display = 'block';
+            setTimeout(() => document.getElementById('erroLogin').style.display = 'none', 2500);
+          }
+        }, 3000);
+      });
+    }
+
+    // ===== Máscara telefone simples =====
+    const tel = document.getElementById('tel');
+    if (tel) {
+      tel.addEventListener('input', (e) => {
+        let v = e.target.value.replace(/\D/g, '');
+        if (v.length > 0) v = '(' + v;
+        if (v.length > 3) v = v.slice(0, 3) + ') ' + v.slice(3);
+        if (v.length > 10) v = v.slice(0, 10) + '-' + v.slice(10, 15);
+        e.target.value = v;
+      });
+    }
+
+    // ===== Pedido → WhatsApp =====
+    const numeroWhatsApp = "5531991136779"; // seu número
+    const formPedido = document.getElementById('formPedido');
+
+    if (formPedido) {
+      formPedido.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (!formPedido.checkValidity()) { formPedido.reportValidity(); return; }
+
+        const nome = document.getElementById('nome').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const telefone = document.getElementById('tel').value.trim();
+        const saborSel = document.getElementById('sabor');
+        const sabor = saborSel.value;
+        const preco = parseFloat(saborSel.selectedOptions[0].dataset.preco || 0);
+        const qtd = parseInt(document.getElementById('quantidade').value, 10);
+        const obs = (document.getElementById('mensagem').value || "Nenhuma observação").trim();
+        const total = (preco * qtd) || 0;
+
+        const texto = [
+          "Olá! Quero fazer um pedido de bolo no pote.",
+          `👤 Nome: ${nome}`,
+          `📧 E-mail: ${email}`,
+          `📱 Telefone: ${telefone}`,
+          `🍰 Sabor escolhido: ${sabor}`,
+          `📦 Quantidade: ${qtd}`,
+          `💵 Valor total: R$ ${total.toFixed(2).replace('.', ',')}`,
+          `📝 Observações: ${obs}`
+        ].join('\n');
+
+        const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(texto)}`;
+        const novaJanela = window.open(url, '_blank');
+
+        if (novaJanela) {
+          formPedido.querySelector('.sucesso').style.display = 'block';
+          formPedido.reset();
+        } else {
+          alert("⚠️ Não foi possível abrir o WhatsApp. Verifique seu navegador (bloqueio de pop-up?).");
+        }
+      });
+    }
+
+    // ===== Cartela fidelidade =====
+    const cartela = document.getElementById('cartela');
+    let pontos = parseInt(localStorage.getItem('pontosFidelidade') || '0', 10);
+
+    function desenharCartela() {
+      if (!cartela) return;
+      cartela.innerHTML = "";
+      for (let i = 1; i <= 10; i++) {
+        const el = document.createElement('div');
+        el.className = 'casa' + (i <= pontos ? ' preenchida' : '');
+        el.textContent = i;
+        cartela.appendChild(el);
+      }
+      localStorage.setItem('pontosFidelidade', pontos.toString());
+    }
+    desenharCartela();
+
+    // Feedback soma 1 ponto (exemplo)
+    const formFeedback = document.getElementById('formFeedback');
+    if (formFeedback) {
+      formFeedback.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (!formFeedback.checkValidity()) { formFeedback.reportValidity(); return; }
+        formFeedback.querySelector('.sucesso').style.display = 'block';
+        pontos = Math.min(10, pontos + 1);
+        if (pontos === 10) {
+          setTimeout(() => alert("🎉 Parabéns! Você completou a cartela e ganhou 1 bolo grátis!"), 50);
+          pontos = 0;
+        }
+        desenharCartela();
+        formFeedback.reset();
+      });
+    }
+
+    // ===== Inicialização: verifica sessão e mostra tela adequada =====
+    document.addEventListener('DOMContentLoaded', () => {
+      // se já houver um usuário logado, vai direto para inicio
+      if (getUsuarioLogado()) {
+        mostrarSecao('inicio');
+      } else {
+        // se não estiver logado, ir pra login (ou cadastro se preferir)
+        mostrarSecao('login');
+      }
+      atualizarVisibilidadeLogout();
+    });
+  </script>
+
+</body>
+</html>
