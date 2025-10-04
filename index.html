@@ -11,13 +11,48 @@
     .erro { color: red; display:none; margin-top:10px; }
     .logout-btn { display:none; margin-left: 10px; }
     header { display:flex; justify-content:space-between; align-items:center; }
+
+.pedido-card {
+  background: #fff8f0;
+  border: 1px solid #d2b48c;
+  border-radius: 8px;
+  margin-bottom: 1em;
+  padding: 1em;
+  box-shadow: 0 2px 8px #0001;
+}
+.pedido-card button {
+  margin-top: 0.5em;
+  margin-right: 0.5em;
+  background: #b77b4b;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.3em 0.8em;
+  cursor: pointer;
+}
+.pedido-card button:hover {
+  background: #8d5a2b;
+}
+#historico h1 {
+  text-align: center;
+}
+#filtrosPedidos label {
+  font-size: 1.1em;
+}
+#filtrosPedidos input[type="radio"] {
+  accent-color: #b77b4b;
+  width: 18px;
+  height: 18px;
+}
+#listaPedidos {
+  margin-top: 1em;
+}
   </style>
 </head>
 <body>
 
   <!-- Cabeçalho com botão de logout (visível quando logado) -->
   <header>
-    <div id="logo">🍰 Bolos no Pote Delícia</div>
     <div>
       <button id="btnLogout" class="logout-btn">🔓 Sair</button>
     </div>
@@ -69,8 +104,26 @@
   <section id="inicio" class="secao">
     <h1>🍰 Bem-vindo ao Bolos no Pote 01.SABORESCRIATIVOBH</h1>
     <p id="bemVindoTexto">O sabor que conquista no primeiro pote!</p>
-    <a href="#" class="btn js-nav" data-target="menu">👉 Clique aqui para começar</a>
+    <a href="#" class="btn js-nav" data-target="home">👉 Clique aqui para começar</a>
   </section>
+
+    <!-- HOME: História da Loja -->
+    <section id="home" class="secao" style="margin-top:80px;">
+      <h1>🏠 Nossa História</h1>
+      <p>
+        Fundada em 12 de dezembro de 2024, a Bolos no Pote Delícia nasceu do sonho de trazer sabores irresistíveis que conquistam cada cliente. Desde o começo, nossa missão foi oferecer aquele doce perfeito, seja para adoçar o dia depois do almoço ou matar aquela vontade, sempre com preço acessível e tamanho ideal para atender às necessidades de todos.
+
+No início, enfrentamos muitos desafios, pois não tínhamos todos os equipamentos necessários para começar. Mas com muita luta, dedicação e amor pelo que fazemos, fomos superando cada obstáculo e conquistando o nosso espaço.
+
+Nada disso seria possível sem o apoio essencial dos nossos patrocinadores, que acreditaram no nosso potencial e ajudaram a criar os designs e o marketing da marca. Também somos imensamente gratos aos nossos familiares e amigos, que estiveram ao nosso lado, oferecendo incentivo, ajuda e força para continuar.
+
+Hoje, temos orgulho em dizer que contamos com mais de 100 clientes fiéis e satisfeitos, que compartilham conosco o amor por um bom doce e a confiança no nosso trabalho. Cada pote representa uma história, um sorriso e a doçura de um sonho que deu certo.
+
+🍰 Momentos doces cabem em um pote! ✨
+Bolos feitos fresquinhos e deliciosos, uma ótima opção para presentear ou adoçar o seu dia.
+      </p>
+      <a href="#" class="btn js-nav" data-target="menu">Ir para o Menu Principal</a>
+    </section>
 
   <!-- MENU PRINCIPAL -->
   <section id="menu" class="secao">
@@ -81,6 +134,7 @@
       <a href="#" class="btn js-nav" data-target="pedido">📦 Fazer Pedido</a>
       <a href="#" class="btn js-nav" data-target="feedback">⭐ Deixar Feedback</a>
       <a href="#" class="btn js-nav" data-target="fidelidade">🎟️ Cartela Fidelidade</a>
+      <a href="#" class="btn js-nav" data-target="historico">📜 Histórico de Pedidos</a>
       <a href="#" class="btn btn-sec js-nav" data-target="inicio">⬅️ Voltar</a>
     </nav>
   </section>
@@ -151,6 +205,19 @@
     <a href="#" class="btn btn-sec js-nav" data-target="menu">⬅️ Voltar</a>
   </section>
 
+  <!-- HISTÓRICO DE PEDIDOS -->
+<section id="historico" class="secao" style="margin-top:80px;">
+  <h1>📜 Histórico de Pedidos</h1>
+  <form id="filtrosPedidos" style="display:flex; flex-direction:column; align-items:center; gap:0.5em; margin-bottom:1em;">
+    <label style="display:flex; align-items:center; gap:0.5em; font-weight:500;"><input type="radio" name="filtroStatus" value="todos" checked> Todos</label>
+    <label style="display:flex; align-items:center; gap:0.5em; font-weight:500;"><input type="radio" name="filtroStatus" value="andamento"> Em Andamento</label>
+    <label style="display:flex; align-items:center; gap:0.5em; font-weight:500;"><input type="radio" name="filtroStatus" value="entregue"> Entregue</label>
+    <label style="display:flex; align-items:center; gap:0.5em; font-weight:500;"><input type="radio" name="filtroStatus" value="cancelado"> Cancelado</label>
+  </form>
+  <div id="listaPedidos"></div>
+  <a href="#" class="btn btn-sec js-nav" data-target="menu">⬅️ Voltar</a>
+</section>
+
   <script>
     // ===== Elementos principais =====
     const btnLogout = document.getElementById('btnLogout');
@@ -187,11 +254,8 @@
 
     function atualizarVisibilidadeLogout() {
       const logado = !!getUsuarioLogado();
-      // mostra botão logout se estiver logado
       btnLogout.style.display = logado ? 'inline-block' : 'none';
-      // se estiver logado, manter o usuário nas telas protegidas, caso contrário redirecionar para login
       if (!logado) {
-        // se nenhuma seção ativa ou se a seção atual não for 'cadastro' nem 'login', forçar para login
         const ativa = document.querySelector('.secao.ativa');
         if (!ativa || (ativa.id !== 'cadastro' && ativa.id !== 'login')) {
           mostrarSecao('login');
@@ -337,6 +401,14 @@
         if (novaJanela) {
           formPedido.querySelector('.sucesso').style.display = 'block';
           formPedido.reset();
+          // Salva pedido no histórico
+          adicionarPedido({
+            sabor,
+            quantidade: qtd,
+            obs,
+            status: 'andamento',
+            data: new Date().toLocaleString()
+          });
         } else {
           alert("⚠️ Não foi possível abrir o WhatsApp. Verifique seu navegador (bloqueio de pop-up?).");
         }
@@ -377,17 +449,71 @@
       });
     }
 
-    // ===== Inicialização: verifica sessão e mostra tela adequada =====
-    document.addEventListener('DOMContentLoaded', () => {
-      // se já houver um usuário logado, vai direto para inicio
-      if (getUsuarioLogado()) {
-        mostrarSecao('inicio');
-      } else {
-        // se não estiver logado, ir pra login (ou cadastro se preferir)
-        mostrarSecao('login');
+    // ===== Histórico de Pedidos =====
+function getPedidos() {
+  return JSON.parse(localStorage.getItem('pedidos') || '[]');
+}
+function setPedidos(pedidos) {
+  localStorage.setItem('pedidos', JSON.stringify(pedidos));
+}
+function adicionarPedido(pedido) {
+  const pedidos = getPedidos();
+  pedidos.push(pedido);
+  setPedidos(pedidos);
+}
+function renderizarPedidos(filtro = 'todos') {
+  const lista = document.getElementById('listaPedidos');
+  if (!lista) return;
+  const pedidos = getPedidos();
+  let filtrados = pedidos;
+  if (filtro !== 'todos') {
+    filtrados = pedidos.filter(p => p.status === filtro);
+  }
+  if (filtrados.length === 0) {
+    lista.innerHTML = '<p>Nenhum pedido encontrado.</p>';
+    return;
+  }
+  lista.innerHTML = filtrados.map((p, i) => `
+    <div class="pedido-card">
+      <strong>#${i+1} - ${p.sabor} (${p.quantidade})</strong><br>
+      <span>Status: <b>${p.status.charAt(0).toUpperCase() + p.status.slice(1)}</b></span><br>
+      <span>Data: ${p.data}</span><br>
+      <span>Obs: ${p.obs}</span><br>
+      ${p.status === 'andamento' ? `<button onclick="atualizarStatusPedido(${i}, 'entregue')">Marcar como Entregue</button> <button onclick="atualizarStatusPedido(${i}, 'cancelado')">Cancelar</button>` : ''}
+    </div>
+  `).join('');
+}
+function atualizarStatusPedido(idx, novoStatus) {
+  const pedidos = getPedidos();
+  if (pedidos[idx]) {
+    pedidos[idx].status = novoStatus;
+    setPedidos(pedidos);
+    renderizarPedidos(document.querySelector('input[name=filtroStatus]:checked').value);
+  }
+}
+document.addEventListener('DOMContentLoaded', () => {
+  // se já houver um usuário logado, vai direto para inicio
+  if (getUsuarioLogado()) {
+    mostrarSecao('inicio');
+  } else {
+    mostrarSecao('login');
+  }
+  atualizarVisibilidadeLogout();
+
+  // Filtros do histórico
+  const radios = document.getElementsByName('filtroStatus');
+  radios.forEach(r => r.addEventListener('change', e => {
+    renderizarPedidos(e.target.value);
+  }));
+  // Renderiza ao abrir histórico
+  document.querySelectorAll('.js-nav').forEach(el => {
+    el.addEventListener('click', function() {
+      if (this.dataset.target === 'historico') {
+        renderizarPedidos(document.querySelector('input[name=filtroStatus]:checked').value);
       }
-      atualizarVisibilidadeLogout();
     });
+  });
+});
   </script>
 
 </body>
